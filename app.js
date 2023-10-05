@@ -22,6 +22,8 @@ const server = http.createServer((req, res) => {
     return res.end();
   }
 
+  fs.writeFileSync("message.txt", "DUMMY message");
+
   // res.setHeader("Content-Type", "text/html");
   // res.write("<html>");
   // res.write("<head><title>My first page</title></head>");
