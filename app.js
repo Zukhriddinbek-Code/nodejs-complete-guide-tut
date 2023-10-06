@@ -16,19 +16,26 @@ const server = http.createServer((req, res) => {
   }
 
   if (url === "/message" && method === "POST") {
-    fs.writeFileSync("message.txt", "DUMMY");
+    const body = [];
+    req.on("data", (chunk) => {
+      console.log(chunk);
+      body.push(chunk);
+    });
+    req.on("end", () => {
+      const parsedBody = Buffer.concat(body).toString();
+      const message = parsedBody.split("=")[1];
+      fs.writeFileSync("message.txt", message);
+    });
     res.statusCode = 302;
     res.setHeader("Location", "/");
     return res.end();
   }
 
-  fs.writeFileSync("message.txt", "DUMMY message");
-
-  // res.setHeader("Content-Type", "text/html");
-  // res.write("<html>");
-  // res.write("<head><title>My first page</title></head>");
-  // res.write("<body><h1>Hello world from node!</h1></body>");
-  // res.write("</html>");
+  res.setHeader("Content-Type", "text/html");
+  res.write("<html>");
+  res.write("<head><title>My first page</title></head>");
+  res.write("<body><h1>Hello world from node!</h1></body>");
+  res.write("</html>");
 
   res.end();
 });
